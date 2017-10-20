@@ -21,18 +21,33 @@ class ControlParser():
 class DHelper():
     def __init__(self):
         self.debian_po_dest = "pofiles"
+        self.default_path = "lliurex-po"
 
     def check_dest(self, packages, source_name):
-        for package in packages.keys()
         if os.path.exists(os.path.join('debian',self.debian_po_dest)):
-            if source_name in packages:
-                packages['pofiles'] = os.path.join('debian',self.debian_po_dest)
+            if source_name in packages.keys():
+                packages[source_name]['pofiles'] = os.path.join('debian',self.debian_po_dest)
+
+        for package in packages.keys():
+            if os.path.exists(os.path.join('debian',package + "." + self.debian_po_dest)):
+                packages[package]['pofiles'] = os.path.join('debian',package + "." + self.debian_po_dest)
+        
+        return packages
+    
+    def check_default_path(self,packages):
+        if os.path.exists(self.default_path):
+            for x in os.listdir(self.default_path):
+                if x in packages.items():
+                    packages[x]['po_folder'] = os.path.join(self.default_path,x)
+                    packages[x]['textdomain'] = x
+        return packages
+
         
 def main():
     control = ControlParser()
     dhelper = DHelper()
     control.load_info()
-    dhelper.check_dest(control.packages, control.source_name)
+    print(dhelper.check_dest(control.packages, control.source_name))
     
     
     
