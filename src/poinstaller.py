@@ -43,3 +43,5 @@ class PoInstaller:
 			polist.append( ( dest, [ file_to_install ] ) )
 		return polist
 
+	def clean(self):
+		shutil.rmtree(self.temp_mo_folder)
