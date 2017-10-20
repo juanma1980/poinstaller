@@ -1,0 +1,42 @@
+#!/usr/bin/python3
+import os
+
+class ControlParser():
+    def __init__(self):
+        try:
+            fp = open('debian/control', 'r', encoding='utf-8')
+        except IOError:
+            raise Exception('cannot find debian/control file')
+        self.lines = fp.readlines()
+        self.packages = {}
+        self.source_name = None
+
+    def load_info(self):
+        for line in self.lines:
+            if line.lower().startswith('package:'):
+                self.packages[line[8:].strip()] = {}
+            elif line.lower().startswith('source:'):
+                self.source_name = line[7:].strip()
+
+class DHelper():
+    def __init__(self):
+        self.debian_po_dest = "pofiles"
+
+    def check_dest(self, packages, source_name):
+        for package in packages.keys()
+        if os.path.exists(os.path.join('debian',self.debian_po_dest)):
+            if source_name in packages:
+                packages['pofiles'] = os.path.join('debian',self.debian_po_dest)
+        
+def main():
+    control = ControlParser()
+    dhelper = DHelper()
+    control.load_info()
+    dhelper.check_dest(control.packages, control.source_name)
+    
+    
+    
+
+
+if __name__ == '__main__':
+    main()
