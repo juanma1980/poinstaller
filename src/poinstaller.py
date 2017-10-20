@@ -15,7 +15,7 @@ class PoInstaller:
 		self.temp_mo_folder = tempfile.mkdtemp(dir='.',prefix='.mo_')
 
 	def get_languages(self):
-		self.langs = [ x[:-3] for x in os.listdir(self.po_folder) if x[-3:] == ".po" ]
+		return [ x[:-3] for x in os.listdir(self.po_folder) if x[-3:] == ".po" ]
 
 	def build(self):
 		if os.path.exists(self.temp_mo_folder):
