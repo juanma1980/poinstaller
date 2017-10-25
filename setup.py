@@ -15,8 +15,8 @@ if __name__ == '__main__':
 		url='https://github.com/lliurex/poinstaller',
 		license='GPL',
 		platforms='UNIX',
-		packages = ['lliurex.i18n'],
-		package_dir = {'lliurex.i18n':'src'},
+		packages = ['dsf.i18n'],
+		package_dir = {'dsf.i18n':'src'},
 		scripts=['dh_poinstaller'],
 		data_files=[('/usr/share/perl5/Debian/Debhelper/Sequence/',['i18n.pm'])]
 	)

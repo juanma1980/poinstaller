@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import re
-from lliurex.i18n.poinstaller import PoInstaller
+from dsf.i18n.poinstaller import PoInstaller
 
 class ControlParser():
     def __init__(self):
