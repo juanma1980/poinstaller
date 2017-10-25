@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import os
+import re
+from lliurex.i18n.poinstaller import PoInstaller
 
 class ControlParser():
     def __init__(self):
@@ -25,40 +27,43 @@ class DHelper():
 
     def check_dest(self, packages, source_name):
         if os.path.exists(os.path.join('debian',self.debian_po_dest)):
+            packages[source_name]['i18n'] = []
             if source_name in packages.keys():
                 packages[source_name]['pofiles'] = os.path.join('debian',self.debian_po_dest)
-                packages[source_name]['i18n'] = []
+            else:
+                packages[source_name]['pofiles'] = None
 
         for pkg in packages.keys():
+            packages[pkg]['i18n'] = []
             if os.path.exists(os.path.join('debian',pkg + "." + self.debian_po_dest)):
                 packages[pkg]['pofiles'] = os.path.join('debian',pkg + "." + self.debian_po_dest)
-                packages[pkg]['i18n'] = []
+            elif 'pofiles' not in packages[pkg].keys():
+                packages[pkg]['pofiles'] = None
         
         return packages
     
-    def check_default_path(self,packages):
-        if os.path.exists(self.default_path):
-            for pkg in os.listdir(self.default_path):
-                print("por aqui")
-                print(packages.keys())
-                if pkg in packages.keys():
-                    print("por alla")
-                    aux = {}
-                    aux['po_folder'] = os.path.join(self.default_path,pkg)
-                    aux['textdomain'] = pkg
-                    packages[pkg]['i18n'].append(aux)
-        return packages
+    # def check_default_path(self,packages):
+    #     if os.path.exists(self.default_path):
+    #         for pkg in os.listdir(self.default_path):
+    #             if pkg in packages.keys():
+    #                 aux = {}
+    #                 aux['po_folder'] = os.path.join(self.default_path,pkg)
+    #                 aux['textdomain'] = pkg
+    #                 packages[pkg]['i18n'].append(aux)
+    #     return packages
 
     def get_po_orig(self, packages):
+        reg = re.compile("(\w+)\s+(.*)")
         for pkg in packages.keys():
-            if 'pofiles' in packages[pkg].keys():
+            if 'pofiles' in packages[pkg].keys() and packages[pkg]['pofiles'] is not None:
                 with open(packages[pkg]['pofiles'], 'r', encoding='utf-8') as fd:
                     for line in fd:
-                        data = line.split(" ")
-                        aux = {}
-                        aux['textdomain'] = data[0]
-                        aux['po_folder'] = data[1:]
-                        packages[pkg]['i18n'].append(aux)
+                        data = reg.match(line)
+                        if data is not None:
+                            aux = {}
+                            aux['textdomain'] = data.group(1)
+                            aux['po_folder'] = data.group(2)
+                            packages[pkg]['i18n'].append(aux)
         return packages
 
 
@@ -68,12 +73,13 @@ def main():
     dhelper = DHelper()
     control.load_info()
     pkg_info = dhelper.check_dest(control.packages, control.source_name)
-    print(dhelper.check_default_path(pkg_info))
+    # dhelper.check_default_path(pkg_info)
     dhelper.get_po_orig(pkg_info)
-    print(pkg_info)
-    
-    
-    
+    for x in pkg_info.keys():
+        for i18n_info in pkg_info[x]['i18n']:
+            po_installer = PoInstaller(i18n_info['po_folder'],i18n_info['textdomain'],os.path.join('debian',x,'usr'))
+            po_installer.build()
+            po_installer.install()
 
 
 if __name__ == '__main__':

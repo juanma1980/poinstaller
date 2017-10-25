@@ -17,4 +17,6 @@ if __name__ == '__main__':
 		platforms='UNIX',
 		packages = ['lliurex.i18n'],
 		package_dir = {'lliurex.i18n':'src'},
+		scripts=['dh_poinstaller'],
+		data-files=[('/usr/share/perl5/Debian/Debhelper/Sequence/',['i18n.pm'])]
 	)
