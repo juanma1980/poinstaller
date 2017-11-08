@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import re
-from dsf.i18n.poinstaller import PoInstaller
+from edupals.i18n.poinstaller import PoInstaller
 
 class ControlParser():
     def __init__(self):
@@ -42,16 +42,6 @@ class DHelper():
         
         return packages
     
-    # def check_default_path(self,packages):
-    #     if os.path.exists(self.default_path):
-    #         for pkg in os.listdir(self.default_path):
-    #             if pkg in packages.keys():
-    #                 aux = {}
-    #                 aux['po_folder'] = os.path.join(self.default_path,pkg)
-    #                 aux['textdomain'] = pkg
-    #                 packages[pkg]['i18n'].append(aux)
-    #     return packages
-
     def get_po_orig(self, packages):
         reg = re.compile("(\w+)\s+(.*)")
         for pkg in packages.keys():
