@@ -43,7 +43,7 @@ class DHelper():
         return packages
     
     def get_po_orig(self, packages):
-        reg = re.compile("(\w+)\s+(.*)")
+        reg = re.compile("([\w-]+)\s+(.*)")
         for pkg in packages.keys():
             if 'pofiles' in packages[pkg].keys() and packages[pkg]['pofiles'] is not None:
                 with open(packages[pkg]['pofiles'], 'r', encoding='utf-8') as fd:
