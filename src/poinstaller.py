@@ -7,12 +7,13 @@ import tempfile
 DEST_TEMP = "share/locale/{}/LC_MESSAGES/"
 
 class PoInstaller:
-	def __init__(self, po_folder, textdomain, dest_folder ):
+	def __init__(self, po_folder, textdomain, dest_folder, links_lang={} ):
 		self.po_folder = po_folder
 		self.textdomain = textdomain
 		self.dest_folder = dest_folder
 		self.langs = []
 		self.temp_mo_folder = tempfile.mkdtemp(dir='.',prefix='.mo_')
+		self.links_lang = links_lang
 
 	def get_languages(self):
 		return [ x[:-3] for x in os.listdir(self.po_folder) if x[-3:] == ".po" ]
@@ -26,6 +27,14 @@ class PoInstaller:
 			aux_path = os.path.join(self.temp_mo_folder, language)
 			os.makedirs(aux_path)
 			aux_file.save_as_mofile(os.path.join(aux_path, self.textdomain + ".mo"))
+			if language in self.links_lang.keys():
+				if type(self.links_lang[language]) != list:
+					continue
+				for aux_language in self.links_lang[language]:
+					aux_path = os.path.join(self.temp_mo_folder,aux_language)
+					if not os.path.exists(aux_path):
+						os.makedirs(aux_path)
+					aux_file.save_as_mofile(os.path.join(aux_path,self.textdomain + ".mo"))
 		
 	def install(self):
 		for language in self.get_languages():

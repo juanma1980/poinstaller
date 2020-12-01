@@ -23,7 +23,21 @@ class ControlParser():
 class DHelper():
     def __init__(self):
         self.debian_po_dest = "pofiles"
+        self.debian_po_links = "polinks"
         self.default_path = "lliurex-po"
+
+    def get_language_links(self,filepath):
+        result = {}
+        with open(filepath,'r') as fd:
+            lines = fd.readlines()
+            for x in lines:
+                try:
+                    key,values = x.split('=')
+                    result[key] = values.split(',')
+                except:
+                    pass
+        return result
+
 
     def check_dest(self, packages, source_name):
         if os.path.exists(os.path.join('debian',self.debian_po_dest)):
@@ -33,12 +47,22 @@ class DHelper():
             else:
                 packages[source_name]['pofiles'] = None
 
+        if os.path.exists(os.path.join('debian',self.debian_po_links)):
+            packages[source_name]['i18nlinks']= {}
+            if source_name in packages.keys():
+                packages[source_name]['i18nlinks'] = self.get_language_links(os.path.join('debian',self.debian_po_links))
+            
+
+
         for pkg in packages.keys():
             packages[pkg]['i18n'] = []
             if os.path.exists(os.path.join('debian',pkg + "." + self.debian_po_dest)):
                 packages[pkg]['pofiles'] = os.path.join('debian',pkg + "." + self.debian_po_dest)
             elif 'pofiles' not in packages[pkg].keys():
                 packages[pkg]['pofiles'] = None
+
+            if os.path.exists(os.path.join('debian',pkg + "." + self.debian_po_links)):
+                packages[pkg]['i18nlinks'] = self.get_language_links(os.path.join('debian',self.debian_po_links))
         
         return packages
     
@@ -67,7 +91,7 @@ def main():
     dhelper.get_po_orig(pkg_info)
     for x in pkg_info.keys():
         for i18n_info in pkg_info[x]['i18n']:
-            po_installer = PoInstaller(i18n_info['po_folder'],i18n_info['textdomain'],os.path.join('debian',x,'usr'))
+            po_installer = PoInstaller(i18n_info['po_folder'],i18n_info['textdomain'],os.path.join('debian',x,'usr'),pkg_info[x]['i18nlinks'])
             po_installer.build()
             po_installer.install()
 
