@@ -62,7 +62,7 @@ class DHelper():
                 packages[pkg]['pofiles'] = None
 
             if os.path.exists(os.path.join('debian',pkg + "." + self.debian_po_links)):
-                packages[pkg]['i18nlinks'] = self.get_language_links(os.path.join('debian',self.debian_po_links))
+                packages[pkg]['i18nlinks'] = self.get_language_links(os.path.join('debian',pkg + "." + self.debian_po_links))
         
         return packages
     
