@@ -31,6 +31,7 @@ class DHelper():
         with open(filepath,'r') as fd:
             lines = fd.readlines()
             for x in lines:
+                x = x.strip()
                 try:
                     key,values = x.split('=')
                     result[key] = values.split(',')

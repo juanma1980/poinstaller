@@ -43,6 +43,15 @@ class PoInstaller:
 			if not os.path.exists(dest):
 				os.makedirs(dest)
 			shutil.copy2(file_to_copy, os.path.join(dest,self.textdomain + ".mo"))
+			if language in self.links_lang.keys():
+				if type(self.links_lang[language]) != list:
+					continue
+				for aux_language in self.links_lang[language]:
+					aux_path = os.path.join(self.dest_folder,DEST_TEMP.format(aux_language))
+					file_to_copy = os.path.join(self.temp_mo_folder, aux_language, self.textdomain + ".mo")
+					if not os.path.exists(aux_path):
+						os.makedirs(aux_path)
+					shutil.copy2(file_to_copy,os.path.join(aux_path,self.textdomain + ".mo"))
 
 	def setup_install(self):
 		polist = []
@@ -50,6 +59,14 @@ class PoInstaller:
 			dest = os.path.join(self.dest_folder,DEST_TEMP.format(language))
 			file_to_install = os.path.join(self.temp_mo_folder, language, self.textdomain + ".mo")
 			polist.append( ( dest, [ file_to_install ] ) )
+			if language in self.links_lang.keys():
+				if type(self.links_lang[language]) != list:
+					continue
+				for aux_language in self.links_lang[language]:
+					dest = os.path.join(self.dest_folder,DEST_TEMP.format(aux_language))
+					file_to_install = os.path.join(self.temp_mo_folder, aux_language, self.textdomain + ".mo")
+					polist.append( ( dest, [ file_to_install ] ) )
+
 		return polist
 
 	def clean(self):
