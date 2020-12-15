@@ -92,10 +92,10 @@ def main():
     dhelper.get_po_orig(pkg_info)
     for x in pkg_info.keys():
         for i18n_info in pkg_info[x]['i18n']:
-	    if "i18links" in pkg_info[x]:
-		links=pkg_info[x]['i18nlinks']
-	    else:
-	        links={}
+            if "i18links" in pkg_info[x]:
+                links=pkg_info[x]['i18nlinks']
+            else:
+                links={}
             po_installer = PoInstaller(i18n_info['po_folder'],i18n_info['textdomain'],os.path.join('debian',x,'usr'),links)
             po_installer.build()
             po_installer.install()
