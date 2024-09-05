@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools","setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "poinstaller" 
+version = "0.2"
+description = "Utility for install"
+authors = [
+	{ name = "Raul Rodrigo Segura", email="raulrodrigosegura@gmail.com" },
+	{ name = "LliureX Team"}
+]
+license = "GPL"
+
+[project.url]
+Repository = "https://github.com/edupals/poinstaller"
+
+[tool.setuptools]
+scripts = [ "dh_poinstaller" ]
+data_files = [ ( "/usr/share/perl5/Debian/Debhelper/Sequence/", [ "i18n.pm" ] ) ]
