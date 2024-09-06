@@ -10,11 +10,9 @@ authors = [
 	{ name = "Raul Rodrigo Segura", email="raulrodrigosegura@gmail.com" },
 	{ name = "LliureX Team"}
 ]
-license = "GPL"
-
-[project.url]
-Repository = "https://github.com/edupals/poinstaller"
+license = {text="GPL-3"}
+urls = {repository="https://github.com/edupals/poinstaller"}
 
 [tool.setuptools]
-scripts = [ "dh_poinstaller" ]
-data_files = [ ( "/usr/share/perl5/Debian/Debhelper/Sequence/", [ "i18n.pm" ] ) ]
+script-files = [ "dh_poinstaller" ]
+#data-files = [ ( "/usr/share/perl5/Debian/Debhelper/Sequence/", [ "i18n.pm" ] ) ]
